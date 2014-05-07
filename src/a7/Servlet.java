@@ -191,11 +191,13 @@ public class Servlet extends HttpServlet {
 		System.out.println("Ishaan");
 		System.out.println(request.getRequestURL());
 		StringBuffer jb = new StringBuffer();
+		//jb.append("{");
 		String line = null;
 		BufferedReader reader = request.getReader();
 		while ((line = reader.readLine()) != null) {
 		 	jb.append(line + "\n");
 		}
+		//jb.append("}");
 		try{
 			if (request.getRequestURI().equals("/Assignment-7/CritterWorld/critters")){
 				createCritter(jb, response);
@@ -269,13 +271,14 @@ public class Servlet extends HttpServlet {
 	void createWorld(StringBuffer jb, HttpServletResponse response) throws IOException, JSONException{
 		response.addHeader("Content-Type", "text/json");
 		response.setStatus(201);
-		System.out.println(jb.toString());
-		JSONObject o = new JSONObject(jb.toString());
-		jb = new StringBuffer(o.getString("definition"));
+		//JSONObject o = new JSONObject(jb.toString());
+		//jb = new StringBuffer();
+		//jb.append("{");
+		//jb.append(o.getString("definition")+"}");
 		cw = new CritterWorld(jb);
 		System.out.println(cw.critters.size());
 		System.out.println("Ishaan");
-		response.getWriter().println("OK");
+		response.getWriter().println("OK343");
 	}
 	
 	void step(HttpServletRequest request, HttpServletResponse response) throws IOException{

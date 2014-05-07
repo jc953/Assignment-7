@@ -119,11 +119,10 @@ public class Controller {
 						 	jb.append(line +"\n");
 						}
 						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world", jb.toString()});
-							//world has been created. now info about state needs to be get()
-						//cw = new CritterWorld(t.getText());
 						t.setText("");
 						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world"});
-				        JSONObject j = new JSONObject(MainClient.getResponse().toString());
+				        System.out.println(MainClient.getResponse().toString());
+						JSONObject j = new JSONObject(MainClient.getResponse().toString());
 						stepLabel.setText("Steps Advanced: " + j.getInt("current_timestep"));
 						critterLabel.setText("Critters Alive: " + j.getInt("population"));
 					}
@@ -405,7 +404,7 @@ public class Controller {
 				}
 				JSONObject request = new JSONObject();
 				if(line != null && line.charAt(0) == 'm'){
-			 		int[] mem = new int[Integer.parseInt(line.substring(line.indexOf(":")))];
+			 		int[] mem = new int[Integer.parseInt(line.substring(line.indexOf(":")+1).trim())];
 			 		try {
 						line = reader.readLine();
 					} catch (IOException e) {
@@ -414,7 +413,7 @@ public class Controller {
 					}
 			 		mem[0] = mem.length;
 			 		for(int i=1;i<5;i++){
-			 			mem[i] = Integer.parseInt(line.substring(line.indexOf(":")));
+			 			mem[i] = Integer.parseInt(line.substring(line.indexOf(":")+1).trim());
 			 			try {
 							line = reader.readLine();
 						} catch (IOException e) {
@@ -424,7 +423,7 @@ public class Controller {
 			 		}
 			 		mem[5] = 0;
 			 		mem[6] = 0;
-			 		mem[7] = Integer.parseInt(line.substring(line.indexOf(":")));
+			 		mem[7] = Integer.parseInt(line.substring(line.indexOf(":")+1).trim());
 			 		JSONArray value = null;
 					try {
 						value = new JSONArray(mem);

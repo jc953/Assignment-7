@@ -61,12 +61,17 @@ public class MainClient {
 	}
 	/** Read back output from the server. Could change to parse JSON... */
 	void dumpResponse(BufferedReader r) throws IOException {
-		for (;;) {
-			String l = r.readLine();
-			if (l == null) break;
-			jb1.append(l+"\n");
+		String l = r.readLine();
+		if(l == null) {
+			jb1 = new StringBuffer();
+			return;
 		}
-		System.out.println(jb1.toString());
+		String l2 = l;
+		while (l != null) {
+			l2 = l;
+			l = r.readLine();
+		}
+		jb1 = new StringBuffer(l2);
 	}
 	
 	int getNumCreated() throws JSONException{
