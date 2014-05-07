@@ -24,5 +24,4 @@ public class Main extends Application {
 		c = new Controller(v, cw);
 		s.show();
 	}
-	
 }
