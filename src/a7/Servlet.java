@@ -29,15 +29,22 @@ import ast.Program;
  */
 @WebServlet("/*")
 public class Servlet extends HttpServlet {
-	private static CritterWorld cw = new CritterWorld();
+	private static CritterWorld cw;
 	
 	private static final long serialVersionUID = 1L;
        
     /**
+     * @throws FileNotFoundException 
      * @see HttpServlet#HttpServlet()
      */
-    public Servlet() {
+    public Servlet() throws FileNotFoundException {
         super();
+        Constants.read("src/constants.txt");
+        if (cw != null){
+        	cw = new CritterWorld("src/world.txt");
+        	cw.step();
+        }
+        
     }
 
 	/**

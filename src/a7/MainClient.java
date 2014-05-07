@@ -75,7 +75,7 @@ public class MainClient {
 		jb1 = new StringBuffer(l2);
 	}
 	
-	int getNumCreated() throws JSONException{
+	public static int getNumCreated() throws JSONException{
 		JSONObject j = new JSONObject(jb1);
 		JSONArray j1 = j.getJSONArray("ids");
 		return j1.length();

@@ -393,100 +393,97 @@ public class Controller {
 					warning("You must load a world first!"); 
 					return;
 				}
-				BufferedReader reader = null;
-				try {
-					reader = new BufferedReader(new InputStreamReader(new FileInputStream(t2.getText())));
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				String line = null;
-				try {
-					line = reader.readLine();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				JSONObject request = new JSONObject();
-				if(line != null && line.charAt(0) == 'm'){
-			 		int[] mem = new int[Integer.parseInt(line.substring(line.indexOf(":")+1).trim())];
-			 		try {
-						line = reader.readLine();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-			 		mem[0] = mem.length;
-			 		for(int i=1;i<5;i++){
-			 			mem[i] = Integer.parseInt(line.substring(line.indexOf(":")+1).trim());
-			 			try {
+				try{
+					if(t1.getText()!= null && t2.getText()!= null){
+						BufferedReader reader = null;
+						try {
+							reader = new BufferedReader(new InputStreamReader(new FileInputStream(t2.getText())));
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						String line = null;
+						try {
 							line = reader.readLine();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-			 		}
-			 		mem[5] = 0;
-			 		mem[6] = 0;
-			 		mem[7] = Integer.parseInt(line.substring(line.indexOf(":")+1).trim());
-			 		JSONArray value = null;
-					try {
-						value = new JSONArray(mem);
-					} catch (JSONException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JSONObject request = new JSONObject();
+						if(line != null && line.charAt(0) == 'm'){
+					 		int[] mem = new int[Integer.parseInt(line.substring(line.indexOf(":")+1).trim())];
+					 		try {
+								line = reader.readLine();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					 		mem[0] = mem.length;
+					 		for(int i=1;i<5;i++){
+					 			mem[i] = Integer.parseInt(line.substring(line.indexOf(":")+1).trim());
+					 			try {
+									line = reader.readLine();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+					 		}
+					 		mem[5] = 0;
+					 		mem[6] = 0;
+					 		mem[7] = Integer.parseInt(line.substring(line.indexOf(":")+1).trim());
+					 		JSONArray value = null;
+							try {
+								value = new JSONArray(mem);
+							} catch (JSONException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+					 		try {
+								request.put("mem", value);
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					 	}
+						String jb = new String(line + "\n");
+						try {
+							while((line=reader.readLine()) != null){
+								jb+=line + "\n";
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						try{
+							request.put("program", jb);
+							request.put("species_id", t2.getText());
+							if(t1.getText() != ""){
+								request.put("num", Integer.parseInt(t1.getText()));
+							}
+						} catch(JSONException j){
+							j.printStackTrace();
+						}
+						//else have something for position set
+						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/critters", request.toString()});
+						t1.setText("");
+						t2.setText("");
+						int num = Integer.parseInt(critterLabel.getText().substring(critterLabel.getText().indexOf(":")+1).trim());
+						try {
+							num+=MainClient.getNumCreated();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						critterLabel.setText("Critters Alive: " + num);
 					}
-			 		try {
-						request.put("mem", value);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					else{
+						warning("Please supply text!");
 					}
-			 	}
-				String jb = new String(line + "\n");
-				try {
-					while((line=reader.readLine()) != null){
-						jb+=line + "\n";
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
-				try{
-					request.put("program", jb);
-					request.put("species_id", t2.getText());
-					if(t1.getText() != ""){
-						request.put("num", Integer.parseInt(t1.getText()));
-					}
-				} catch(JSONException j){
-					j.printStackTrace();
+				catch (NumberFormatException nfe){
+					warning("Please give a number \nin the correct format");
 				}
-				//else have something for position set
-				System.out.println(request.toString());
-				MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/critters", request.toString()});
-				//change critters alive to MainClient.getNumCreated();
-				//try{
-				//	if(t1.getText()!= null && t2.getText()!= null){
-				//		try{
-				//			for(int i=0;i<Integer.parseInt(t1.getText());i++){
-				//				cw.addRandomCritter(t2.getText());
-				//			}
-				//		}
-				//		catch (FileNotFoundException fnfe){
-				//			warning("The file you specified was\nin the wrong format!");
-				//		}
-				//		t1.setText("");
-				//		t2.setText("");
-				//		critterLabel.setText("Critters Alive: " + cw.critters.size());
-				//	}
-				//	else{
-				//		warning("Please supply text!");
-				//	}
-				//}
-				//catch (NumberFormatException nfe){
-					//warning("Please give a number \nin the correct format");
-				//}
-				//cw.update(v);
+				cw.update(v);
             }
         });
 		
