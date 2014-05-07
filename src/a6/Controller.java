@@ -462,7 +462,8 @@ public class Controller {
 					j.printStackTrace();
 				}
 				//else have something for position set
-				MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/critters", jb.toString()});
+				System.out.println(request.toString());
+				MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/critters", request.toString()});
 				//change critters alive to MainClient.getNumCreated();
 				//try{
 				//	if(t1.getText()!= null && t2.getText()!= null){

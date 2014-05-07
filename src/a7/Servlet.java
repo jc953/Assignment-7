@@ -29,7 +29,7 @@ import ast.Program;
  */
 @WebServlet("/*")
 public class Servlet extends HttpServlet {
-	private static CritterWorld cw;
+	private static CritterWorld cw = new CritterWorld();
 	
 	private static final long serialVersionUID = 1L;
        
@@ -212,6 +212,7 @@ public class Servlet extends HttpServlet {
 	}
 			
 	void createCritter(StringBuffer jb, HttpServletResponse response) throws IOException, JSONException{
+		System.out.println(jb.toString() + "Ishaan");
 		response.addHeader("Content-Type", "text/json");
 		response.setStatus(201);
 		JSONObject o = new JSONObject(jb.toString());
