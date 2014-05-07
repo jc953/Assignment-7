@@ -125,7 +125,7 @@ public class Controller {
 						JSONObject j = new JSONObject(MainClient.getResponse().toString());
 						stepLabel.setText("Steps Advanced: " + j.getInt("current_timestep"));
 						critterLabel.setText("Critters Alive: " + j.getInt("population"));
-						cw = new CritterWorld("src/world.txt");
+						cw = new CritterWorld(j);
 						cw.update(v);
 					}
 					catch (FileNotFoundException fnfe){
