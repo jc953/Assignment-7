@@ -1,0 +1,11 @@
+memsize: 9
+defense: 2
+offense: 3
+size: 1
+energy: 500
+posture: 17
+1 = 1 --> grow;
+2 = 2 --> grow;
+1 = 1 --> grow;
+1 = 1 --> grow;
+1 = 1 --> grow;

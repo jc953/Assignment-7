@@ -1,0 +1,7 @@
+memsize: 9
+defense: 2
+offense: 3
+size: 7
+energy: 3359
+posture: 17
+1 = 1 --> mate;

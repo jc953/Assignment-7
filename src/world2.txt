@@ -1,0 +1,5 @@
+rock 3 2
+critter src/update-critter.txt 10 2 0
+critter src/nearby-critter.txt 2 2 0
+critter src/ahead-critter.txt 30 2 3
+critter src/random-critter.txt 3 3 0

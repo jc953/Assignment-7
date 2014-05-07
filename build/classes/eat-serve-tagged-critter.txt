@@ -1,0 +1,8 @@
+memsize: 9
+defense: 2
+offense: 3
+size: 5
+energy: 2359
+posture: 17
+mem[4] = 2359 --> serve [ 34 ];
+mem[4] < 2359 --> eat;

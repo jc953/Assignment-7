@@ -1,0 +1,9 @@
+memsize: 10
+defense: 2
+offense: 3
+size: 1
+energy: 500
+posture: 17
+ahead[0-1] = 0-5 --> right;
+ahead[21] > 0 --> forward;
+ahead[21] = 0 --> left;

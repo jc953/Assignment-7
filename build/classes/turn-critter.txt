@@ -1,0 +1,8 @@
+memsize: 9
+defense: 2
+offense: 3
+size: 1
+energy: 316
+posture: 17
+mem[4]=316 --> left;
+mem[4]<316 --> right;

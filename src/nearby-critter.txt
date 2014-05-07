@@ -1,0 +1,10 @@
+memsize: 10
+defense: 2
+offense: 3
+size: 1
+energy: 500
+posture: 17
+nearby[0] = 0-1 --> right;
+nearby[0] > 0 --> right;
+nearby[0] < 0-1 --> right;
+ 

@@ -1,0 +1,17 @@
+memsize: 9
+defense: 2
+offense: 3
+size: 1
+energy: 500
+posture: 17
+{nearby[3] = 0 or nearby[3] < 0-1} and ENERGY > 2500 --> bud;
+{ENERGY > SIZE  * 400 and SIZE < 7} --> grow;
+ahead[0] < 0-1 and ENERGY < 500 * SIZE --> eat;
+(ahead[1] mod 1000) != 17 and ahead[1] > 0 --> attack;
+ahead[1] < 0-5 --> forward;
+ahead[2] < 0-10 and ahead[1] = 0 --> forward;
+ahead[3] < 0-15 and ahead[1] = 0 --> forward;
+ahead[4] < 0-20 and ahead[1] = 0 --> forward;
+nearby[0] > 0 and {nearby[3] = 0 or nearby[3] < 0-1} --> backward;
+random[3] = 1 --> left;
+1 = 1 --> wait;
