@@ -105,19 +105,6 @@ public class CritterWorld {
 		}
 	}
 	
-	public CritterWorld(JSONObject json) throws JSONException{
-		hexes = new Hex[json.getInt("cols")][json.getInt("rows")-json.getInt("cols")/2];
-		for (int i = 0; i < hexes.length; i++){
-			for (int j = 0; j < hexes[0].length; j++){
-				hexes[i][j] = new Hex();
-			}
-		}
-		critters = new ArrayList<Critter>();
-		steps = 0;
-		log = new ArrayList<Hex[][]>();
-		System.out.println(json.toString());
-	}
-	
 	/**
 	 * Uses a text file to create a rock. Creates a rock at the chosen column 
 	 * and row, as long as they are within the boundaries.
@@ -329,7 +316,7 @@ public class CritterWorld {
 		json.put("rate", rate);
 		json.put("population", critters.size());
 		json.put("rows", hexes[0].length);
-		json.put("columns", hexes.length);
+		json.put("cols", hexes.length);
 		JSONArray temp = new JSONArray();
 		for (int i = c; i < d; i++){
 			for (int j = a; j < b; j++){
@@ -383,7 +370,7 @@ public class CritterWorld {
 		json.put("rate", rate);
 		json.put("population", critters.size());
 		json.put("rows", hexes[0].length);
-		json.put("columns", hexes.length);
+		json.put("cols", hexes.length);
 		JSONArray temp = new JSONArray();
 		Hex[][] tempState = log.get(updatesince);
 		for (int i = c; i < d; i++){

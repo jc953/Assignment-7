@@ -187,17 +187,12 @@ public class Servlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(request.getRequestURI());
-		System.out.println("Ishaan");
-		System.out.println(request.getRequestURL());
 		StringBuffer jb = new StringBuffer();
-		//jb.append("{");
 		String line = null;
 		BufferedReader reader = request.getReader();
 		while ((line = reader.readLine()) != null) {
 		 	jb.append(line + "\n");
 		}
-		//jb.append("}");
 		try{
 			if (request.getRequestURI().equals("/Assignment-7/CritterWorld/critters")){
 				createCritter(jb, response);

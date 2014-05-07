@@ -121,12 +121,10 @@ public class Controller {
 						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world", jb.toString()});
 						t.setText("");
 						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world"});
-				        System.out.println(MainClient.getResponse().toString());
-				        System.out.println("WFAFSFSAFSDA");
 						JSONObject j = new JSONObject(MainClient.getResponse().toString());
 						stepLabel.setText("Steps Advanced: " + j.getInt("current_timestep"));
 						critterLabel.setText("Critters Alive: " + j.getInt("population"));
-						cw = new CritterWorld(j);
+						cw = new CritterWorld(jb);
 						cw.update(v);
 					}
 					catch (FileNotFoundException fnfe){

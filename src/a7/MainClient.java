@@ -37,7 +37,7 @@ public class MainClient {
 			this.url = new URL(url);
 			HttpURLConnection connection = (HttpURLConnection) this.url.openConnection();
 			if (message == null) {
-				System.out.println("ff");
+				System.out.println(url);
 				connection.connect();
 				System.out.println("Doing GET " + url);
 				BufferedReader r = new BufferedReader(new InputStreamReader(
