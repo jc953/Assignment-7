@@ -11,8 +11,9 @@ public class RingBufferFactory<T> {
 	 * @return a new synchronized ring buffer
 	 */
 	public BlockingQueue<T> getSynchronizedBuffer(int capacity){
-		// DO NOT CHANGE HEADER (addition or deletion)
-		return null; //TODO implement
+		RingBuffer<T> rb = new RingBuffer<T>();
+		rb.setCapacity(capacity);
+		return rb;
 	}
 
 

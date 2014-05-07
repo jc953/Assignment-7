@@ -6,7 +6,12 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class RingBuffer<T> implements BlockingQueue<T>{
-
+	private int capacity;
+	
+	public void setCapacity(int capacity){
+		this.capacity = capacity;
+	}
+	
 	@Override
 	public T element() {
 		//NEEDTODO
