@@ -103,7 +103,19 @@ public class CritterWorld {
 			}
 			hexes[col][row].rock = true;
 		}
-		
+	}
+	
+	public CritterWorld(JSONObject json) throws JSONException{
+		hexes = new Hex[json.getInt("cols")][json.getInt("rows")-json.getInt("cols")/2];
+		for (int i = 0; i < hexes.length; i++){
+			for (int j = 0; j < hexes[0].length; j++){
+				hexes[i][j] = new Hex();
+			}
+		}
+		critters = new ArrayList<Critter>();
+		steps = 0;
+		log = new ArrayList<Hex[][]>();
+		System.out.println(json.toString());
 	}
 	
 	/**
