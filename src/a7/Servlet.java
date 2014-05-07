@@ -29,7 +29,7 @@ import ast.Program;
  */
 @WebServlet("/*")
 public class Servlet extends HttpServlet {
-	private static CritterWorld cw;
+	public static CritterWorld cw;
 	
 	private static final long serialVersionUID = 1L;
        
@@ -41,8 +41,7 @@ public class Servlet extends HttpServlet {
         super();
         Constants.read("src/constants.txt");
         if (cw != null){
-        	cw = new CritterWorld("src/world.txt");
-        	cw.step();
+        	cw = new CritterWorld();
         }
         
     }
