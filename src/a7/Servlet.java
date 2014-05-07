@@ -271,14 +271,8 @@ public class Servlet extends HttpServlet {
 	void createWorld(StringBuffer jb, HttpServletResponse response) throws IOException, JSONException{
 		response.addHeader("Content-Type", "text/json");
 		response.setStatus(201);
-		//JSONObject o = new JSONObject(jb.toString());
-		//jb = new StringBuffer();
-		//jb.append("{");
-		//jb.append(o.getString("definition")+"}");
 		cw = new CritterWorld(jb);
-		System.out.println(cw.critters.size());
-		System.out.println("Ishaan");
-		response.getWriter().println("OK343");
+		response.getWriter().println("OK");
 	}
 	
 	void step(HttpServletRequest request, HttpServletResponse response) throws IOException{
