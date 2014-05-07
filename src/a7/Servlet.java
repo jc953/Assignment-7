@@ -38,19 +38,6 @@ public class Servlet extends HttpServlet {
      */
     public Servlet() {
         super();
-        Constants.read("src/constants.txt");
-        try {
-        	if (cw == null) {
-        		cw = new CritterWorld("src/world.txt");
-        		cw.step();
-        		cw.step();
-        		cw.step();
-        		cw.step();
-        		cw.step();
-        	}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
     }
 
 	/**
@@ -266,6 +253,7 @@ public class Servlet extends HttpServlet {
 	void createWorld(StringBuffer jb, HttpServletResponse response) throws IOException, JSONException{
 		response.addHeader("Content-Type", "text/json");
 		response.setStatus(201);
+		System.out.println(jb.toString());
 		cw = new CritterWorld(jb);
 		response.getWriter().println("OK");
 	}
