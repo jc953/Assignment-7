@@ -109,7 +109,7 @@ public class Controller {
 		
 		Button b = new Button("Load World");
 		final TextField t = new TextField("");
-		v.getVBox().getChildren().addAll(stepLabel, critterLabel,b,t);
+		v.getVBox().getChildren().addAll(stepLabel, critterLabel, speedLabel,b,t);
 		
 		b.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -127,13 +127,7 @@ public class Controller {
 						System.out.println(request.toString());
 						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world", request.toString()});
 						t.setText("");
-						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world"});
-						System.out.println(MainClient.getResponse().toString());
-						JSONObject j = new JSONObject(MainClient.getResponse().toString());
-						stepLabel.setText("Steps Advanced: " + j.getInt("current_timestep"));
-						critterLabel.setText("Critters Alive: " + j.getInt("population"));
-						cw = new CritterWorld(jb);
-						cw.update(v);
+						update();
 					}
 					catch (FileNotFoundException fnfe){
 						warning("The file you specified \nwas in the wrong format!");
@@ -152,7 +146,6 @@ public class Controller {
 				else{
 					warning("Please supply text!");
 				}
-				cw.update(v);
             }
         });
 		
@@ -210,7 +203,7 @@ public class Controller {
 					if (speed != 0){
 						step(1);
 					}
-					cw.update(v);
+					update();
 				}
 		}));
 		
@@ -265,7 +258,8 @@ public class Controller {
 			public void handle(ActionEvent _){
 				try{
 					if(t.getText()!= null){
-						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/run?rate="+Integer.parseInt(t.getText()),""});
+						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/run?rate="+Double.parseDouble(t.getText()),""});
+						update();
 						speed = cw.rate;
 						if(speed<.04) {
 							speed = .04; 
@@ -284,7 +278,7 @@ public class Controller {
 									if (speed != 0){
 										step(1);
 									}
-									cw.update(v);
+									update();
 								}
 						}));
 					}
@@ -304,6 +298,7 @@ public class Controller {
 				if (cw != null) {
 					try{
 						step(Integer.parseInt(t2.getText()));
+						t2.setText("");
 					} catch (NumberFormatException n){
 						warning("Numbers only!");
 					}
@@ -332,13 +327,11 @@ public class Controller {
 	}
 	/**
 	 * Method to step the world one step
+	 * @throws JSONException 
 	 */
-	void step(int numsteps){
+	void step(int numsteps) {
 		MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/step?count="+numsteps, ""});
-		//MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world"});
-		//System.out.println(MainClient.getResponse().toString());
-		//JSONObject j = new JSONObject(MainClient.getResponse().toString());
-		//critterLabel.setText("Critters Alive: " + j.getInt("population"));
+		update();		
 	}
 	/**
 	 * Method to create controls for creating critters
@@ -737,6 +730,22 @@ public class Controller {
 		clicked = "";
 		selected = null;
 		removeHexBox();
+	}
+	
+	void update(){
+		MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world"});
+		JSONObject j;
+		try {
+			j = new JSONObject(MainClient.getResponse().toString());
+			cw = new CritterWorld(j);
+			cw.update(v);
+			critterLabel.setText("Critters Alive: " + j.getInt("population"));
+			stepLabel.setText("Steps Advanced: "+j.getInt("current_timestep"));
+			speedLabel.setText("Current Speed (sec): " +j.getDouble("rate"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
 

@@ -58,7 +58,7 @@ public class CritterWorld {
 	}
 	
 	public CritterWorld(StringBuffer jb) throws FileNotFoundException {
-		String str = jb.toString();
+		String str = jb.toString().substring(16);
 		hexes = new Hex[Constants.MAX_COLUMN][Constants.MAX_ARRAY_ROW];
 		for (int i = 0; i < hexes.length; i++){
 			for (int j = 0; j < hexes[0].length; j++){
