@@ -28,6 +28,7 @@ public class Main extends Application {
 		cw = new CritterWorld(j);
 		v = new View(s, cw);
 		c = new Controller(v, cw);
+		c.update();
 		s.show();
 	}
 }
