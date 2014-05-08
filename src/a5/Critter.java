@@ -28,6 +28,7 @@ public class Critter {
 	public int column;
 	public int row; 
 	boolean matePossible;
+	public double hue;
 
 	/**
 	 * Constructor for Critter loaded from file
@@ -80,6 +81,7 @@ public class Critter {
 			id = currentId;
 			currentId++;
 			species_id = "supercritter";
+			hue = Math.random()*2-1;
 		} catch (IOException e) {
 			throw new FileNotFoundException();
 		}
@@ -120,6 +122,7 @@ public class Critter {
 		id = currentId;
 		currentId++;
 		species_id="supercritter";
+		hue = Math.random()*2-1;
 	}
 	
 	public Critter(JSONObject json, CritterWorld critterworld) throws JSONException{
@@ -136,6 +139,7 @@ public class Critter {
 		}
 		matePossible = false;
 		lastRule = null;
+		hue = json.getDouble("hue");
 		StringReader str = new StringReader(json.getString("program")+";");
 		ParserImpl p = new ParserImpl();
 		program = p.parse(str);
@@ -774,6 +778,7 @@ public class Critter {
 		json.put("column", column);
 		json.put("direction", direction);
 		json.put("mem", mem);
+		json.put("hue", hue);
 		sb = new StringBuffer();
 		if (lastRule == null){
 			json.put("recently_executed_rule", "No rule executed yet");

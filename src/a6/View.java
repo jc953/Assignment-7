@@ -37,8 +37,6 @@ public class View {
 	private Pane hexesPane;
 	private Polygon background;
 	private ScrollPane sp;
-	ArrayList<Program> programs; //Different computers will see species differently
-	ArrayList<Double> hues;
 
 	/**
 	 * Initializes the constants of View and sets the stage and CritterWorld. 
@@ -54,8 +52,6 @@ public class View {
 		hL = Constants.HEX_LENGTH;
 		hA = Constants.HEX_APOTHEM;
 		diff = Constants.HEX_DIFF;
-		programs = new ArrayList<Program>();
-		hues = new ArrayList<Double>();
 		g = new Group();
 		Scene scene = new Scene(g);
 		s.setScene(scene);
@@ -110,14 +106,11 @@ public class View {
 	 */
 	public void update(CritterWorld cw){ 
 		if (!this.cw.equals(cw)){
-			programs = new ArrayList<Program>();
-			hues = new ArrayList<Double>();
 			this.cw=cw;
 		}
 		world.getChildren().removeAll(actors, hexesPane);
 		actors = new Pane();
 		world.getChildren().addAll(actors, hexesPane);
-		setColors();
 		for (HexPolygon h : hexes){
 			h.reset();
 			if (h.hasObject()){
@@ -126,26 +119,6 @@ public class View {
 		}
 	}
 	
-	/**
-	 * Sets the colors that will be used by the critters to determine different
-	 * species.
-	 */
-	public void setColors(){
-		for (Critter c : cw.critters){
-			boolean exists = false;
-				for (Program p : programs){
-					if (c.program.equals(p)){
-						exists = true;
-						break;
-					}
-				}
-			if (!exists){
-				programs.add(c.program);
-				hues.add(Math.random()*2-1);
-			}
-		}
-	}
-
 	/**
 	 * Zooms in or out of the world pane. Has a cap as to how much it can zoom
 	 * in or out.

@@ -1,39 +1,50 @@
 package a7;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class RingBuffer<T> implements BlockingQueue<T>{
-	private int capacity;
+	private int index;
+	private int tail;
+	private int capacity1;
+	private T[] threads;
 	
-	public void setCapacity(int capacity){
-		this.capacity = capacity;
+	public RingBuffer(int capacity){
+		index = 0;
+		tail = 0;
+		capacity1 = capacity;
+		threads = new T[20];
 	}
 	
 	@Override
 	public T element() {
-		//NEEDTODO
-		return null;
+		return threads[index];
 	}
 
 	@Override
 	public T peek() {
-		//NEEDTODO
-		return null;
+		if (index >= threads.length){
+			return null;
+		}
+		return threads[index];
 	}
 
 	@Override
 	public T poll() {
-		//NEEDTODO
-		return null;
+		if (index >= threads.length){
+			return null;
+		}
+		return remove();
 	}
 
 	@Override
 	public T remove() {
-		//NEEDTODO
-		return null;
+		T temp = threads[index];
+		index++;
+		return temp;
 	}
 
 	@Override
@@ -53,14 +64,12 @@ public class RingBuffer<T> implements BlockingQueue<T>{
 
 	@Override
 	public boolean isEmpty() {
-		//NEEDTODO
-		return false;
+		return index >= threads.length;
 	}
 
 	@Override
 	public Iterator<T> iterator() {
-		//NEEDTODO
-		return null;
+		return Arrays.asList(threads).iterator();
 	}
 
 	@Override
@@ -75,8 +84,7 @@ public class RingBuffer<T> implements BlockingQueue<T>{
 
 	@Override
 	public int size() {
-		//NEEDTODO
-		return 0;
+		return threads.length;
 	}
 
 	@Override
@@ -91,14 +99,23 @@ public class RingBuffer<T> implements BlockingQueue<T>{
 
 	@Override
 	public boolean add(T arg0) {
-		//NEEDTODO
-		return false;
+		if (threads.length-index > capacity){
+			throw new IllegalStateException();
+		}
+		threads = Arrays.copyOf(threads, threads.length+1);
+		threads[threads.length-1] = arg0;
+		return true;
 	}
 
 	@Override
 	public boolean contains(Object arg0) {
-		//NEEDTODO
-		return false;
+		boolean result = false;
+		for (int i = 0; i < threads.length; i++){
+			if (threads[i].equals(arg0)){
+				result = true;
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -113,8 +130,12 @@ public class RingBuffer<T> implements BlockingQueue<T>{
 
 	@Override
 	public boolean offer(T arg0) {
-		//NEEDTODO
-		return false;
+		if (threads.length-index > capacity){
+			return false;
+		}
+		threads = Arrays.copyOf(threads, threads.length+1);
+		threads[threads.length-1] = arg0;
+		return true;
 	}
 
 	@Override
@@ -141,7 +162,14 @@ public class RingBuffer<T> implements BlockingQueue<T>{
 
 	@Override
 	public boolean remove(Object arg0) {
-		//NEEDTODO
+		for (int i = 0; i < threads.length; i++){
+			if (threads[i].equals(arg0)){
+				T[] thread1 = Arrays.copyOfRange(threads, 0, i);
+				T[] thread2 = Arrays.copyOfRange(threads, i+1, threads.length);
+				threads.
+				return true;
+			}
+		}
 		return false;
 	}
 

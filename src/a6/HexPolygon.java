@@ -136,11 +136,7 @@ public class HexPolygon extends Polygon {
 			imgv.setY(y-size/2.0);
 			imgv.setRotate(getCritter().direction*60);
 			ColorAdjust color = new ColorAdjust();
-			int index = 0;
-			for (int i = 0; i < v.programs.size(); i++){
-				if (v.programs.get(i).equals(getCritter().program)) index = i;
-			}
-			double hue = v.hues.get(index);
+			double hue = getCritter().hue;
 			color.setHue(hue);
 			imgv.setEffect(color);
 			return imgv;

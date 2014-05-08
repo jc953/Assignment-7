@@ -11,8 +11,7 @@ public class RingBufferFactory<T> {
 	 * @return a new synchronized ring buffer
 	 */
 	public BlockingQueue<T> getSynchronizedBuffer(int capacity){
-		RingBuffer<T> rb = new RingBuffer<T>();
-		rb.setCapacity(capacity);
+		RingBuffer<T> rb = new RingBuffer<T>(capacity);
 		return rb;
 	}
 

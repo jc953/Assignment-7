@@ -374,6 +374,7 @@ public class CritterWorld {
 					critter.put("col", i);
 					critter.put("direction", c1.direction);
 					critter.put("mem", c1.mem);
+					critter.put("hue", c1.hue);
 					sb = new StringBuffer();
 					if (c1.lastRule == null){
 						critter.put("recently_executed_rule", "No rule executed yet");
@@ -424,6 +425,7 @@ public class CritterWorld {
 					critter.put("col", i);
 					critter.put("direction", c1.direction);
 					critter.put("mem", c1.mem);
+					critter.put("hue", c1.hue);
 					sb = new StringBuffer();
 					if (c1.lastRule == null){
 						critter.put("recently_executed_rule", "No rule executed yet");
