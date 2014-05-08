@@ -113,7 +113,7 @@ public class CritterWorld {
 			}
 		}
 		critters = new ArrayList<Critter>();
-		steps = 0;		
+		steps = json.getInt("current_timestep");	
 		log = new ArrayList<Hex[][]>();
 		JSONArray state = json.getJSONArray("state");
 		for (int i = 0; i < state.length(); i++){
