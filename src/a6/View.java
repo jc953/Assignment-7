@@ -37,7 +37,7 @@ public class View {
 	private Pane hexesPane;
 	private Polygon background;
 	private ScrollPane sp;
-	ArrayList<Program> programs;
+	ArrayList<Program> programs; //Different computers will see species differently
 	ArrayList<Double> hues;
 
 	/**

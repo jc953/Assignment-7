@@ -1,8 +1,10 @@
 package a5;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -77,6 +79,7 @@ public class Critter {
 			br.close();
 			id = currentId;
 			currentId++;
+			species_id = "supercritter";
 		} catch (IOException e) {
 			throw new FileNotFoundException();
 		}
@@ -116,6 +119,26 @@ public class Critter {
 		matePossible = false;
 		id = currentId;
 		currentId++;
+		species_id="supercritter";
+	}
+	
+	public Critter(JSONObject json, CritterWorld critterworld) throws JSONException{
+		id = json.getInt("id");
+		species_id = json.getString("species_id");
+		this.critterworld = critterworld;
+		this.column = json.getInt("col");
+		this.row = json.getInt("row");
+		this.direction = json.getInt("direction");
+		JSONArray mems = json.getJSONArray("mem");
+		this.mem = new int[mems.length()];
+		for (int i = 0; i < mems.length(); i++){
+			this.mem[i] = mems.getInt(i);
+		}
+		matePossible = false;
+		lastRule = null;
+		StringReader str = new StringReader(json.getString("program")+";");
+		ParserImpl p = new ParserImpl();
+		program = p.parse(str);
 	}
 
 	/**

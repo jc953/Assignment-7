@@ -40,10 +40,9 @@ public class Servlet extends HttpServlet {
     public Servlet() throws FileNotFoundException {
         super();
         Constants.read("src/constants.txt");
-        if (cw != null){
-        	cw = new CritterWorld();
+        if (cw == null){
+        	cw = new CritterWorld("src/world.txt");
         }
-        
     }
 
 	/**
@@ -218,7 +217,6 @@ public class Servlet extends HttpServlet {
 	}
 			
 	void createCritter(StringBuffer jb, HttpServletResponse response) throws IOException, JSONException{
-		System.out.println(jb.toString() + "Ishaan");
 		response.addHeader("Content-Type", "text/json");
 		response.setStatus(201);
 		JSONObject o = new JSONObject(jb.toString());

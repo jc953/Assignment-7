@@ -105,6 +105,31 @@ public class CritterWorld {
 		}
 	}
 	
+	public CritterWorld(JSONObject json) throws JSONException{
+		hexes = new Hex[json.getInt("cols")][json.getInt("rows")];
+		for (int i = 0; i < hexes.length; i++){
+			for (int j = 0; j < hexes[0].length; j++){
+				hexes[i][j] = new Hex();
+			}
+		}
+		critters = new ArrayList<Critter>();
+		steps = 0;		
+		log = new ArrayList<Hex[][]>();
+		JSONArray state = json.getJSONArray("state");
+		for (int i = 0; i < state.length(); i++){
+			JSONObject hex = state.getJSONObject(i);
+			String type = hex.getString("type");
+			if (type.equals("rock"))
+				hexes[hex.getInt("col")][hex.getInt("row")-hex.getInt("col")/2].rock = true;
+			else if (type.equals("food")){
+				hexes[hex.getInt("col")][hex.getInt("row")].food=hex.getInt("value");
+			} else if (type.equals("critter")){
+				hexes[hex.getInt("col")][hex.getInt("row")].critter=new Critter(hex, this);
+				critters.add(hexes[hex.getInt("col")][hex.getInt("row")].critter);
+			}
+		}
+	}
+	
 	/**
 	 * Uses a text file to create a rock. Creates a rock at the chosen column 
 	 * and row, as long as they are within the boundaries.
@@ -323,14 +348,14 @@ public class CritterWorld {
 				if (hexes[i][j].rock){
 					JSONObject rock = new JSONObject();
 					rock.put("row", j+(i+1)/2);
-					rock.put("column", i);
+					rock.put("col", i);
 					rock.put("type", "rock");
 					temp.put(rock);
 				} 
 				if (hexes[i][j].food > 0){
 					JSONObject food = new JSONObject();
 					food.put("row", j+(i+1)/2);
-					food.put("column", i);
+					food.put("col", i);
 					food.put("type", "food");
 					food.put("value", hexes[i][j].food);
 					temp.put(food);
@@ -345,7 +370,7 @@ public class CritterWorld {
 					c1.program.prettyPrint(sb);
 					critter.put("program", sb);
 					critter.put("row", j+(i+1)/2);
-					critter.put("column", i);
+					critter.put("col", i);
 					critter.put("direction", c1.direction);
 					critter.put("mem", c1.mem);
 					sb = new StringBuffer();
@@ -380,7 +405,7 @@ public class CritterWorld {
 				if (cur.food > 0 && hex.food!=cur.food){
 					JSONObject food = new JSONObject();
 					food.put("row", j+(i+1)/2);
-					food.put("column", i);
+					food.put("col", i);
 					food.put("type", "food");
 					food.put("value", cur.food);
 					temp.put(food);
@@ -395,7 +420,7 @@ public class CritterWorld {
 					c1.program.prettyPrint(sb);
 					critter.put("program", sb);
 					critter.put("row", j+(i+1)/2);
-					critter.put("column", i);
+					critter.put("col", i);
 					critter.put("direction", c1.direction);
 					critter.put("mem", c1.mem);
 					sb = new StringBuffer();
@@ -411,7 +436,7 @@ public class CritterWorld {
 					JSONObject none = new JSONObject();
 					none.put("type", "nothing");
 					none.put("row", j+(i+1)/2);
-					none.put("column", i);
+					none.put("col", i);
 					temp.put(none);
 				}	
 			}
