@@ -37,14 +37,11 @@ public class MainClient {
 			this.url = new URL(url);
 			HttpURLConnection connection = (HttpURLConnection) this.url.openConnection();
 			if (message == null) {
-				System.out.println(url);
 				connection.connect();
-				System.out.println("Doing GET " + url);
 				BufferedReader r = new BufferedReader(new InputStreamReader(
 						connection.getInputStream()));
 				dumpResponse(r);
 			} else {
-				System.out.println("Doing POST "+ url);
 				connection.setDoOutput(true); // send a POST message
 				connection.setRequestMethod("POST");
 				PrintWriter w = new PrintWriter(connection.getOutputStream());

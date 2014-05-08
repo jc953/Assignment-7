@@ -197,18 +197,6 @@ public class Controller {
 		speedControls.getChildren().addAll(b2, t);
 		v.getVBox().getChildren().addAll(b, t2, speedControls);
 		
-		timeline = new Timeline(new KeyFrame(Duration.seconds(speed), 
-				new EventHandler<ActionEvent>(){
-				
-				@Override
-				public void handle(ActionEvent arg0){
-					if (speed != 0){
-						step(1);
-					}
-					update();
-				}
-		}));
-		
 		b2.setOnMouseEntered(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent _){
@@ -228,7 +216,7 @@ public class Controller {
 		t.setOnMouseEntered(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent _){
-				infoLabel.setText("Please specify a number \nbetween .04 and 100 \n(seconds)");
+				infoLabel.setText("Please specify a number \nbetween .5 and 30 \n(steps/second)");
 			}
 		});
 		
@@ -264,26 +252,29 @@ public class Controller {
 						update();
 						System.out.println(cw.rate+"in controeler");
 						speed = cw.rate;
-						if(speed<.04) {
-							speed = .04; 
-							warning("That is too fast,speed \nhas been set to .04! ");
+						if(speed<0.5) {
+							if (speed == 0) ;
+							else{
+								speed = 0.5; 
+								warning("That is too slow,speed \nhas been set to 0.5! ");
+							}
+							
 						}
-						if(speed>100) {
-							speed = 100; 
-							warning("That is too slow,speed \nhas been set to 100! ");
+						if(speed>30) {
+							speed = 30; 
+							warning("That is too slow,speed \nhas been set to 30! ");
 						}
 						t.setText("");
-						timeline = new Timeline(new KeyFrame(Duration.seconds(speed), 
+						timeline = new Timeline(new KeyFrame(Duration.seconds(1/speed), 
 								new EventHandler<ActionEvent>(){
 								
 								@Override
 								public void handle(ActionEvent arg0){
-									if (speed != 0){
-										step(1);
-									}
-									update();
+									step(1);
 								}
 						}));
+						timeline.setCycleCount(Timeline.INDEFINITE);
+						timeline.play();
 					}
 					else{
 						warning("Please supply text!");
@@ -309,7 +300,6 @@ public class Controller {
 				else{
 					warning("Please load a world!");
 				}
-				cw.update(v);
             }
         });
 		
@@ -365,6 +355,7 @@ public class Controller {
 						}
 						String line = null;
 						try {
+				 			reader.mark(1);
 							line = reader.readLine();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -406,6 +397,7 @@ public class Controller {
 								e.printStackTrace();
 							}
 					 	}
+						reader.reset();
 						String jb = new String(line + "\n");
 						try {
 							while((line=reader.readLine()) != null){
@@ -440,6 +432,9 @@ public class Controller {
 				}
 				catch (NumberFormatException n){
 					warning("Please give a number \nin the correct format");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 				cw.update(v);
             }

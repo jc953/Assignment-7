@@ -41,7 +41,7 @@ public class Servlet extends HttpServlet {
         super();
         Constants.read("src/constants.txt");
         if (cw == null){
-        	cw = new CritterWorld("src/world.txt");
+        	cw = new CritterWorld();
         }
     }
 
@@ -220,9 +220,10 @@ public class Servlet extends HttpServlet {
 		response.addHeader("Content-Type", "text/json");
 		response.setStatus(201);
 		JSONObject o = new JSONObject(jb.toString());
-		StringReader str = new StringReader(o.getString("program"));
+		StringReader str = new StringReader(o.getString("program")+";");
 		ArrayList<Integer> ids = new ArrayList<Integer>();
 		ParserImpl p = new ParserImpl();
+		System.out.println(o.getString("program"));
 		Program critterProgram = p.parse(str);
 		JSONArray ja = o.getJSONArray("mem");
 		int[] mem = new int[ja.length()];
@@ -285,7 +286,6 @@ public class Servlet extends HttpServlet {
 		}
 		response.setStatus(200);
 		cw.rate = r;
-		System.out.println(cw.rate+"in servelet");
 		response.getWriter().println("OK");
 	}
 }
