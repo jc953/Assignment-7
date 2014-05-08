@@ -7,11 +7,13 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import a5.*;
 import a7.MainClient;
 import javafx.animation.KeyFrame;
@@ -104,7 +106,7 @@ public class Controller {
 		stepLabel.setFont(Font.font("Copperplate Gothic Bold",14));
 		critterLabel = new Label("Critters Alive: 0");
 		critterLabel.setFont(Font.font("Copperplate Gothic Bold", 14));
-		speedLabel = new Label("Current Speed (sec): 0");
+		speedLabel = new Label("Current Speed(sec): 0");
 		speedLabel.setFont(Font.font("Copperplate Gothic Bold", 14));
 		
 		Button b = new Button("Load World");
@@ -260,6 +262,7 @@ public class Controller {
 					if(t.getText()!= null){
 						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/run?rate="+Double.parseDouble(t.getText()),""});
 						update();
+						System.out.println(cw.rate+"in controeler");
 						speed = cw.rate;
 						if(speed<.04) {
 							speed = .04; 
@@ -741,7 +744,7 @@ public class Controller {
 			cw.update(v);
 			critterLabel.setText("Critters Alive: " + j.getInt("population"));
 			stepLabel.setText("Steps Advanced: "+j.getInt("current_timestep"));
-			speedLabel.setText("Current Speed (sec): " +j.getDouble("rate"));
+			speedLabel.setText("Current Speed(sec): " +j.getDouble("rate"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

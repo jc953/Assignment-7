@@ -138,7 +138,6 @@ public class Critter {
 		lastRule = null;
 		StringReader str = new StringReader(json.getString("program")+";");
 		ParserImpl p = new ParserImpl();
-		System.out.println(json.getString("program"));
 		program = p.parse(str);
 	}
 

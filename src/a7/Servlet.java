@@ -258,7 +258,6 @@ public class Servlet extends HttpServlet {
 	void createWorld(StringBuffer jb, HttpServletResponse response) throws IOException, JSONException{
 		response.addHeader("Content-Type", "text/json");
 		response.setStatus(201);
-		System.out.println(jb.toString());
 		cw = new CritterWorld(jb);
 		response.getWriter().println("OK");
 	}
@@ -286,6 +285,7 @@ public class Servlet extends HttpServlet {
 		}
 		response.setStatus(200);
 		cw.rate = r;
+		System.out.println(cw.rate+"in servelet");
 		response.getWriter().println("OK");
 	}
 }
