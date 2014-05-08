@@ -467,20 +467,17 @@ public class Controller {
 						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/critters", request.toString()});
 						t1.setText("");
 						t2.setText("");
-						int num = Integer.parseInt(critterLabel.getText().substring(critterLabel.getText().indexOf(":")+1).trim());
-						try {
-							num+=MainClient.getNumCreated();
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						critterLabel.setText("Critters Alive: " + num);
+						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world"});
+						System.out.println(MainClient.getResponse().toString());
+						JSONObject j = new JSONObject(MainClient.getResponse().toString());
+						critterLabel.setText("Critters Alive: " + j.getInt("population"));
+						//int num = Integer.parseInt(critterLabel.getText().substring(critterLabel.getText().indexOf(":")+1).trim());
 					}
 					else{
 						warning("Please supply text!");
 					}
 				}
-				catch (NumberFormatException nfe){
+				catch (NumberFormatException | JSONException nfe){
 					warning("Please give a number \nin the correct format");
 				}
 				cw.update(v);
