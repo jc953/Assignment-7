@@ -18,7 +18,7 @@ public class CritterWorld {
 	public Hex[][] hexes;
 	public ArrayList<Critter> critters;
 	public int steps;
-	public double rate;
+	public double rate = 0;
 	public ArrayList<Hex[][]> log;
 	
 	/**
@@ -115,6 +115,7 @@ public class CritterWorld {
 		critters = new ArrayList<Critter>();
 		steps = json.getInt("current_timestep");	
 		log = new ArrayList<Hex[][]>();
+		rate = json.getDouble("rate");
 		JSONArray state = json.getJSONArray("state");
 		for (int i = 0; i < state.length(); i++){
 			JSONObject hex = state.getJSONObject(i);
