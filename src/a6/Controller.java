@@ -51,10 +51,11 @@ public class Controller {
 	Label hexCritterInfo;
 	Label hexRockInfo;
 	Label hexFoodInfo;
-	int speed;
+	double speed;
 	VBox hexBox;
 	Timeline timeline;
 	StringBuffer sb;
+	Label speedLabel;
 	
 	/**
 	 * Constructor for Controller. 
@@ -70,7 +71,7 @@ public class Controller {
 		this.cw = cw;
 		this.v = v;
 		v.getVBox().setSpacing(3.5);
-		speed = 1000;
+		speed = 0;
 		infoLabel = new Label("Hover cursor over a command "
 				+ "\nand watch this space for help");
 		infoLabel.setFont(Font.font("Comic Sans MS",14));
@@ -103,6 +104,9 @@ public class Controller {
 		stepLabel.setFont(Font.font("Copperplate Gothic Bold",14));
 		critterLabel = new Label("Critters Alive: 0");
 		critterLabel.setFont(Font.font("Copperplate Gothic Bold", 14));
+		speedLabel = new Label("Current Speed (sec): 0");
+		speedLabel.setFont(Font.font("Copperplate Gothic Bold", 14));
+		
 		Button b = new Button("Load World");
 		final TextField t = new TextField("");
 		v.getVBox().getChildren().addAll(stepLabel, critterLabel,b,t);
@@ -189,7 +193,6 @@ public class Controller {
 	 */
 	void setWorldSteps(){
 		Button b = new Button("Advance Steps");
-		final Button b1 = new Button("Step Continuously");
 		final HBox speedControls = new HBox();
 		final Button b2 = new Button("Set step speed to: ");
 		final TextField t = new TextField();
@@ -197,14 +200,14 @@ public class Controller {
 		t.setMaxWidth(50.0); 
 		t.setMinWidth(50.0);
 		speedControls.getChildren().addAll(b2, t);
-		v.getVBox().getChildren().addAll(b, t2, b1, speedControls);
+		v.getVBox().getChildren().addAll(b, t2, speedControls);
 		
-		timeline = new Timeline(new KeyFrame(Duration.millis(speed), 
+		timeline = new Timeline(new KeyFrame(Duration.seconds(speed), 
 				new EventHandler<ActionEvent>(){
 				
 				@Override
 				public void handle(ActionEvent arg0){
-					if (b1.getText() == "Stop Stepping"){
+					if (speed != 0){
 						step(1);
 					}
 					cw.update(v);
@@ -215,7 +218,7 @@ public class Controller {
 			@Override
 			public void handle(MouseEvent _){
 				infoLabel.setText("Allows you to change the \nstepping speed "
-						+ "to the number \nof milliseconds specified");
+						+ "to the number \nof seconds specified");
 			}
 		});
 		
@@ -230,7 +233,7 @@ public class Controller {
 		t.setOnMouseEntered(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent _){
-				infoLabel.setText("Please specify a number \nbetween 50 and 10,000 \n(milliseconds)");
+				infoLabel.setText("Please specify a number \nbetween .04 and 100 \n(seconds)");
 			}
 		});
 		
@@ -245,7 +248,7 @@ public class Controller {
 		t2.setOnMouseEntered(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent _){
-				infoLabel.setText("Please specify a number \nbetween 50 and 500 \n (number of critters to create)");
+				infoLabel.setText("Please specify the number \nod steps you wish to \nexecute");
 			}
 		});
 		
@@ -262,23 +265,23 @@ public class Controller {
 			public void handle(ActionEvent _){
 				try{
 					if(t.getText()!= null){
-						Main.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/run?rate="+Integer.parseInt(t.getText()),""});
-						//speed = Integer.parseInt(t.getText());
-						if(speed<50) {
-							speed = 50; 
-							warning("That is too fast,speed \nhas been set to 50! ");
+						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/run?rate="+Integer.parseInt(t.getText()),""});
+						speed = cw.rate;
+						if(speed<.04) {
+							speed = .04; 
+							warning("That is too fast,speed \nhas been set to .04! ");
 						}
-						if(speed>10000) {
-							speed = 10000; 
-							warning("That is too slow,speed \nhas been set to 10,000! ");
+						if(speed>100) {
+							speed = 100; 
+							warning("That is too slow,speed \nhas been set to 100! ");
 						}
 						t.setText("");
-						timeline = new Timeline(new KeyFrame(Duration.millis(speed), 
+						timeline = new Timeline(new KeyFrame(Duration.seconds(speed), 
 								new EventHandler<ActionEvent>(){
 								
 								@Override
 								public void handle(ActionEvent arg0){
-									if (b1.getText() == "Stop Stepping"){
+									if (speed != 0){
 										step(1);
 									}
 									cw.update(v);
@@ -313,26 +316,10 @@ public class Controller {
         });
 		
 		
-		b1.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent _){
-				if(b1.getText() == "Step Continuously"){
-					b1.setText("Stop Stepping");
-					timeline.setCycleCount(Timeline.INDEFINITE);
-					timeline.play();
-				}
-				else{
-					b1.setText("Step Continuously");
-					timeline.stop();
-				}
-				cw.update(v);
-			}
-		});
-		
 		b.setOnMouseEntered(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent _){
-				infoLabel.setText("Advances the World one step");
+				infoLabel.setText("Advances the World the number\nof steps specified below");
 			}
 		});
 		
@@ -342,38 +329,16 @@ public class Controller {
 				infoLabel.setText("");
 			}
 		});
-		
-		b1.setOnMouseEntered(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent _){
-				if(b1.getText() == "Stop Stepping"){
-					infoLabel.setText("Stops automatic advancement");
-				}
-				else{
-					infoLabel.setText("Advances the world \ncontinuously at rate defined\n"
-							+ " or by default, one \nstep per second");
-				}
-			}
-		});
-		
-		b1.setOnMouseExited(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent _){
-				infoLabel.setText("Hover cursor over a command "
-						+ "\nand watch this space for help");
-			}
-		});
 	}
 	/**
 	 * Method to step the world one step
 	 */
 	void step(int numsteps){
 		MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/step?count="+numsteps, ""});
-		//cw.step();
-		//get for numsteps
-        //stepLabel.setText("Steps Advanced: " + cw.steps);
-        //critterLabel.setText("Critters Alive: " + cw.critters.size());
-		//deselect();
+		//MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world"});
+		//System.out.println(MainClient.getResponse().toString());
+		//JSONObject j = new JSONObject(MainClient.getResponse().toString());
+		//critterLabel.setText("Critters Alive: " + j.getInt("population"));
 	}
 	/**
 	 * Method to create controls for creating critters
@@ -467,17 +432,17 @@ public class Controller {
 						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/critters", request.toString()});
 						t1.setText("");
 						t2.setText("");
-						MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world"});
-						System.out.println(MainClient.getResponse().toString());
-						JSONObject j = new JSONObject(MainClient.getResponse().toString());
-						critterLabel.setText("Critters Alive: " + j.getInt("population"));
+						//MainClient.main(new String[]{"http://localhost:8080/Assignment-7/CritterWorld/world"});
+						//System.out.println(MainClient.getResponse().toString());
+						//JSONObject j = new JSONObject(MainClient.getResponse().toString());
+						//critterLabel.setText("Critters Alive: " + j.getInt("population"));
 						//int num = Integer.parseInt(critterLabel.getText().substring(critterLabel.getText().indexOf(":")+1).trim());
 					}
 					else{
 						warning("Please supply text!");
 					}
 				}
-				catch (NumberFormatException | JSONException nfe){
+				catch (NumberFormatException n){
 					warning("Please give a number \nin the correct format");
 				}
 				cw.update(v);
@@ -643,64 +608,6 @@ public class Controller {
 		if (selected.getCritter() == null){
 			hexCritterInfo = new Label("There is no critter\ncurrently inhabiting\nthis hex, but...");
 			hexBox.getChildren().addAll(hexRockInfo, hexFoodInfo, hexCritterInfo);
-			Button b = new Button("You can add one! From\n"
-					+ " from file:");
-			final TextField t1 = new TextField("");
-			hexBox.getChildren().addAll(b, t1);
-			
-			b.setOnMouseEntered(new EventHandler<MouseEvent>(){
-				@Override
-				public void handle(MouseEvent _){
-					infoLabel.setText("Loads the critter from\nfile specified below \n and places it "
-							+ "on this \nhex");
-				}
-			});
-			
-			b.setOnMouseExited(new EventHandler<MouseEvent>(){
-				@Override
-				public void handle(MouseEvent _){
-					infoLabel.setText("Hover cursor over a command "
-							+ "\nand watch this space for help");
-				}
-			});
-			
-			t1.setOnMouseEntered(new EventHandler<MouseEvent>(){
-				@Override
-				public void handle(MouseEvent _){
-					infoLabel.setText("Please specify a file");
-				}
-			});
-			
-			t1.setOnMouseExited(new EventHandler<MouseEvent>(){
-				@Override
-				public void handle(MouseEvent _){
-					infoLabel.setText("Hover cursor over a command "
-							+ "\nand watch this space for help");
-				}
-			});
-			
-			b.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-	            public void handle(ActionEvent _) {
-					if(!t1.getText().equals("")){
-						try{
-							cw.addCritterHere(selected.column, selected.arrRow, t1.getText());
-							t1.setText("");
-							critterLabel.setText("Critters Alive: " + cw.critters.size());
-							cw.update(v);
-							removeHexBox();
-							hexControls();
-						}
-						catch (FileNotFoundException fnfe){
-							warning("The file you specified \nwas in the wrong format!");
-						}
-					}
-					else{
-						warning("Please Supply Text!");
-					}
-				}
-			});			
-			v.getVBox().getChildren().add(hexBox);
 		}
 		displayCritterInfo();
 	}
@@ -730,7 +637,6 @@ public class Controller {
 		}
 		sb = new StringBuffer();
 		Button b = new Button("Program");
-		Button b1 = new Button("View Hex Controls");
 		selected.getCritter().program.prettyPrint(sb);
 		b.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -750,33 +656,6 @@ public class Controller {
 		        s1.show();			
 			}
         });		
-		
-		b1.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				VBox controls = new VBox();
-				controls.setAlignment(Pos.CENTER);
-				final Stage s1 = new Stage();
-				Button step = new Button("step"), wait = new Button("wait"), move1 = new Button("move forward"), 
-						move2 = new Button("move backward"), turn1 = new Button("turn left"), 
-						turn2 = new Button("turn right"), eat = new Button("eat"), 
-						attack = new Button("attack"), grow = new Button("grow"), 
-						bud = new Button("bud"), mate = new Button("mate"), serve = new Button("serve");
-				TextField serveAmount = new TextField("Enter amount to serve");
-		        controlCritters(step, wait, move1, move2, turn1, 
-		        		turn2, eat, attack, grow, bud, mate, serve, serveAmount, s1);
-				controls.getChildren().addAll(new Label("Make this "
-						+ "Critter:"), step, wait, move1, move2, turn1, 
-						turn2, eat, attack, grow, bud, mate, serve, serveAmount);
-		        Group g = new Group();
-		        g.getChildren().add(controls);
-		        Scene scene = new Scene(g);
-		        s1.setScene(scene);
-		        s1.setWidth(200);
-		        s1.setHeight(530);
-		        s1.show();			
-			}
-        });
 		StringBuffer sb1 = new StringBuffer("The last rule performed was \n");
 		if (selected.getCritter().lastRule != null) {
 			selected.getCritter().lastRule.prettyPrint(sb1);
@@ -784,7 +663,7 @@ public class Controller {
 		} else {
 			hexBox.getChildren().add(new Label("This critter has not \nperformed a rule yet."));
 		}
-		hexBox.getChildren().addAll(b,b1);
+		hexBox.getChildren().add(b);
 		v.getVBox().getChildren().add(hexBox);
 	}
 	
@@ -848,172 +727,7 @@ public class Controller {
 		v.getVBox().getChildren().remove(hexBox);
 		hexBox = new VBox();
 	}
-	/**
-	 * Method to give user control of a particular critter's actions
-	 * @param step Button that gives user control over a critter action
-	 * @param wait Button that gives user control over a critter action
-	 * @param move1 Button that gives user control over a critter action 
-	 * @param move2 Button that gives user control over a critter action
-	 * @param turn1 Button that gives user control over a critter action
-	 * @param turn2 Button that gives user control over a critter action
-	 * @param eat Button that gives user control over a critter action
-	 * @param attack Button that gives user control over a critter action
-	 * @param grow Button that gives user control over a critter action
-	 * @param bud Button that gives user control over a critter action
-	 * @param mate Button that gives user control over a critter action
-	 * @param serve Button that gives user control over a critter action
-	 * @param serveA TextField that gives user control over a critter action
-	 * @param s1 Stage to display critter actions to user
-	 */
-	void controlCritters(Button step,Button wait,Button move1,Button move2,Button turn1, 
-			Button turn2,Button eat,Button attack,Button grow,Button bud,Button mate, Button serve
-			, TextField serveA, Stage s1){
-		final Stage s = s1;
-		final TextField serveAmount = serveA; 
-		step.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().step();
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		wait.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().waitTurn();
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		move1.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().move(1);
-				cw.update(v);
-				deselect();
-				s.close();
-				
-            }
-        });
-		
-		move2.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().move(-1);
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		turn1.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().turn(-1);
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		turn2.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().turn(1);
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		eat.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().eat();
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		grow.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().grow();
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		bud.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().bud();
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		attack.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().attack();
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		mate.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				selected.getCritter().mate();
-				int[] pos = selected.getCritter().getAdjacentPositions(selected.column,selected.row);
-				if(cw.hexes[pos[0]][pos[1]].critter != null) cw.hexes[pos[0]][pos[1]].critter.mate();
-				cw.update(v);
-				deselect();
-				s.close();
-            }
-        });
-		
-		serve.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-            public void handle(ActionEvent _) {
-				try{
-					selected.getCritter().serve(Integer.parseInt(serveAmount.getText()));
-					cw.update(v);
-					deselect();
-					s.close();
-				}
-				catch (NumberFormatException nfe){
-					warning("Please enter a number \nin the correct format!");
-				}
-            }
-        });
-		
-		serveAmount.setOnMouseEntered(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent _){
-				serveAmount.setText("");
-			}
-		});
-		
-		serveAmount.setOnMouseExited(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent _){
-				if(serveAmount.getText().equals("")){
-					serveAmount.setText("Enter amount to serve");
-				}
-			}
-		});
-	}
+	
 	/**
 	 * Method to deselect a hex
 	 */
@@ -1025,3 +739,8 @@ public class Controller {
 		removeHexBox();
 	}
 }
+
+//fix stepping
+//take out useless controls 
+//fix everything
+//fix delete
